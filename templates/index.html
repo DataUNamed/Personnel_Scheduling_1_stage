@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Bancolombia scheduler</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        // Configurar la escena
+        const scene = new THREE.Scene();
+
+        // Configurar la cámara
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        // Crear un renderizador
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Crear un cubo con una textura
+        const textureLoader = new THREE.TextureLoader();
+        const texture = textureLoader.load('https://centromayor.com.co/wp-content/uploads/2023/02/logo_bancolombia_centro_mayor-2.jpg');
+        const geometry = new THREE.BoxGeometry();
+        const material = new THREE.MeshBasicMaterial({ map: texture });
+        const cube = new THREE.Mesh(geometry, material);
+
+        // Agregar el cubo a la escena
+        scene.add(cube);
+
+        // Agregar luz ambiental
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        // Crear un objeto de texto
+        const loader = new THREE.FontLoader();
+        loader.load('https://threejs.org/examples/fonts/helvetiker_bold.typeface.json', function (font) {
+            const textGeometry = new THREE.TextGeometry('Bancolombia \nScheduler', {
+                font: font,
+                size: 0.5,
+                height: 0.1,
+            });
+
+            const textMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+            const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+
+            // Posicionar el texto en la escena
+            textMesh.position.set(-2.0, 2, 0);
+
+            // Agregar el texto a la escena
+            scene.add(textMesh);
+
+            // Animación
+            const animate = () => {
+                requestAnimationFrame(animate);
+
+                // Rotar el cubo
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+
+                renderer.render(scene, camera);
+            };
+
+            animate();
+        });
+    </script>
+</body>
+</html>
